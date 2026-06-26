@@ -75,7 +75,7 @@
 
 <div class="container">
   <h1>ساخت کاروسل موجودی روزانه</h1>
-  <div class="subhead">مجموعه خودرویی پورمند — نسخه فیکس شده متون v15</div>
+  <div class="subhead">مجموعه خودرویی پورمند — نسخه فیکس شده متون v16</div>
 
   <div class="panel" id="cover-panel">
     <div class="panel-title"><span>اسلاید کاور اصلی</span></div>
@@ -99,7 +99,7 @@
 
   <button class="action btn-add" style="background: linear-gradient(135deg, #1A305C 0%, #0C172E 100%); color: #E5C173; font-weight:700; box-shadow: 0 4px 15px rgba(0,0,0,0.4);" onclick="addCar()">✨ افزودن خودرو جدید به لیست</button>
 
-  <div class="note">طراحی اختصاصی لوکس برای پیج پورمند — همپوشانی متون کاملاً برطرف شد.</div>
+  <div class="note">طراحی اختصاصی لوکس برای پیج پورمند — لود آنی و پرسرعت فرم‌ها.</div>
 </div>
 
 <script>
@@ -128,105 +128,4 @@ function drawBrandFooter(ctx){
   roundedRect(ctx,boxX,boxY,boxW,boxH,r); ctx.stroke();
   
   ctx.fillStyle=GOLD; ctx.font='900 54px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.direction='rtl';
-  ctx.fillText('مجموعه خودرویی پورمند', 540, boxY + boxH/2 + 3);
-  ctx.restore();
-}
-
-function renderCover(){
-  const canvas=document.getElementById('coverCanvas'); if(!canvas) return;
-  const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,SIZE,SIZE); bgGradient(ctx);
-
-  ctx.save(); ctx.translate(540,340);
-  ctx.strokeStyle=GOLD; ctx.lineWidth=4; ctx.beginPath(); ctx.arc(0,0,170,0,Math.PI*2); ctx.stroke();
-  ctx.beginPath(); ctx.arc(0,0,188,0,Math.PI*2); ctx.strokeStyle=GOLD_DIM; ctx.lineWidth=1.5; ctx.stroke();
-  ctx.fillStyle=GOLD; ctx.textAlign='center'; ctx.direction='rtl';
-  ctx.font='900 76px Vazirmatn, Tahoma, sans-serif'; ctx.fillText('موجودی',0,-12); 
-  ctx.font='700 56px Vazirmatn, Tahoma, sans-serif'; ctx.fillText('امروز',0,68); ctx.restore();
-
-  const dateVal=document.getElementById('coverDate').value || 'امروز';
-  ctx.fillStyle=CREAM; ctx.font='700 52px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center'; ctx.direction='rtl';
-  ctx.fillText(dateVal,540,625);
-
-  const subVal=document.getElementById('coverSub').value || 'موجودی امروز نمایشگاه';
-  if(subVal){ ctx.fillStyle=GOLD; ctx.font='500 36px Vazirmatn, Tahoma, sans-serif'; ctx.fillText(subVal,540,690); }
-  ctx.fillStyle=SLATE; ctx.font='400 32px Vazirmatn, Tahoma, sans-serif'; ctx.fillText('برای مشاهده مدل‌ها ورق بزنید ←',540,785);
-  drawBrandFooter(ctx);
-}
-
-function drawCarPhoto(ctx, car) {
-  // ارتفاع عکس را از ۵۶۰ به ۵۰۰ رساندیم تا فضای متن‌ها کاملاً باز شود
-  const x=60, y=55, w=960, h=500, r=32;
-  roundedRect(ctx,x,y,w,h,r); ctx.save(); ctx.clip();
-  
-  if (car.img) {
-    const scale=Math.max(w/car.img.width,h/car.img.height);
-    const iw=car.img.width*scale, ih=car.img.height*scale;
-    ctx.drawImage(car.img, x+(w-iw)/2, y+(h-ih)/2, iw, ih);
-  } else {
-    const g = ctx.createLinearGradient(x, y, x, y+h);
-    g.addColorStop(0, '#0F1E36'); g.addColorStop(1, '#060B14');
-    ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
-    
-    ctx.strokeStyle = 'rgba(229, 193, 115, 0.12)'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+w, y+h); ctx.moveTo(x+w, y); ctx.lineTo(x, y+h); ctx.stroke();
-    
-    ctx.fillStyle = GOLD; ctx.font = '500 34px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('📸 لمس کنید و عکس واقعی خودرو را بگذارید', 540, y + h/2 + 12);
-  }
-  ctx.restore();
-  ctx.strokeStyle=GOLD; ctx.lineWidth=4; roundedRect(ctx,x,y,w,h,r); ctx.stroke();
-}
-
-let carCount=0; const cars={}; let contacts=[];
-const CONTACTS_KEY='pourmand-contacts-v15';
-const DEFAULT_CONTACTS=[
-  {id:0,name:'علی‌اصغر پورمند',phone:'۰۹۱۴۶۴۰۱۱۲۰'},
-  {id:1,name:'علی‌اصغر پورمند',phone:'۰۹۱۰۴۰۴۴۴۹۲'},
-  {id:2,name:'خانم انوشه',phone:'۰۹۱۴۸۵۰۵۰۷۵'},
-  {id:3,name:'سعید پورمند',phone:'۰۹۱۴۶۲۳۹۵۲۴'}
-];
-
-function loadContacts(){
-  try { const raw=localStorage.getItem(CONTACTS_KEY); if(raw){ const p=JSON.parse(raw); if(Array.isArray(p)&&p.length){ contacts=p; return; } } }catch(e){}
-  contacts=DEFAULT_CONTACTS.slice();
-}
-function saveContacts(){ try{ localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts)); }catch(e){} }
-
-function renderContactsList(){
-  const wrap=document.getElementById('contacts-list'); wrap.innerHTML='';
-  contacts.forEach(c=>{
-    const row=document.createElement('div'); row.className='contact-row';
-    row.innerHTML=`
-      <div style="flex:1.2"><label>نام پاسخ‌دهنده</label><input type="text" value="${c.name}" oninput="updateContact(${c.id},'name',this.value)"></div>
-      <div style="flex:1"><label>شماره تماس</label><input type="text" value="${c.phone}" oninput="updateContact(${c.id},'phone',this.value)"></div>
-      <button class="action btn-danger" onclick="removeContact(${c.id})">حذف</button>
-    `;
-    wrap.appendChild(row);
-  });
-}
-
-function updateContact(id,field,value){
-  const c=contacts.find(x=>x.id===id); if(c){ c[field]=value; saveContacts(); refreshAllContactSelects(); renderAllCars(); }
-}
-function addContact(){ contacts.push({id:Date.now(), name:'', phone:''}); saveContacts(); renderContactsList(); refreshAllContactSelects(); }
-function removeContact(id){ contacts=contacts.filter(c=>c.id!==id); saveContacts(); renderContactsList(); refreshAllContactSelects(); renderAllCars(); }
-
-function contactOptionsHtml(selectedId){
-  let html='<option value="">انتخاب مسئول فروش...</option>';
-  contacts.forEach(c=>{ const sel=(String(selectedId)===String(c.id))?'selected':''; html+=`<option value="${c.id}" ${sel}>${c.name} (${c.phone})</option>`; });
-  return html;
-}
-function refreshAllContactSelects(){
-  Object.keys(cars).forEach(id=>{ const sel=document.getElementById('contact-select-'+id); if(sel){ sel.innerHTML=contactOptionsHtml(cars[id].contactId); } });
-}
-
-function drawCar(ctx,car){
-  ctx.clearRect(0,0,SIZE,SIZE); bgGradient(ctx);
-  drawCarPhoto(ctx, car);
-
-  ctx.direction='rtl'; ctx.fillStyle=CREAM; ctx.font='900 58px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center';
-  // اسم ماشین آمد روی مختصات ۶۱۰
-  ctx.fillText(car.name||'نام خودروی شما',540,610);
-
-  let metaParts = [];
-  if(car.model)
+  ctx.fillText('مجموعه خودرویی پورمند', 540, boxY + boxH/2 + 3
