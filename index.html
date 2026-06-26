@@ -253,7 +253,6 @@ function refreshAllContactSelects(){
   Object.keys(cars).forEach(id=>{ const sel=document.getElementById('contact-select-'+id); if(sel){ sel.innerHTML=contactOptionsHtml(cars[id].contactId); } });
 }
 
-// سیستم هوشمند دریافت تصویر بدون محدودیت
 function autoSearchImage(id) {
   const carName = document.getElementById(`name-${id}`).value;
   const statusLbl = document.getElementById(`status-${id}`);
@@ -277,10 +276,7 @@ function autoSearchImage(id) {
     statusLbl.innerText = '❌ تصویری یافت نشد. لطفاً نام را دقیق‌تر بنویسید یا دستی آپلود کنید.';
   };
 
-  // استفاده از سورس آنلاین و مستقیم تصویر هوشمند
-  img.src = `https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=80`;
-  // جهت تغییر داینامیک بر اساس سرچ شما:
-  img.src = `https://source.unsplash.com/1000x600/?${query}`;
+  img.src = "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=80";
 }
 
 function drawCar(ctx,car,img){
@@ -396,4 +392,14 @@ function handleImage(id, input){
 }
 
 function downloadCanvas(canvasId, filenameBase){
-  const canvas=document.getElementById(canvasId); const link=document.createElement
+  const canvas=document.getElementById(canvasId); const link=document.createElement('a');
+  link.download=filenameBase+'.png'; link.href=canvas.toDataURL('image/png'); link.click();
+}
+
+window.onload = function() {
+  loadContacts(); renderContactsList();
+  document.fonts.ready.then(() => { renderCover(); addCar(); });
+};
+</script>
+</body>
+</html>
