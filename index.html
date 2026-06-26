@@ -75,9 +75,8 @@
 
 <div class="container">
   <h1>ساخت کاروسل موجودی روزانه</h1>
-  <div class="subhead">مجموعه خودرویی پورمند — نسخه ۱۰۰٪ مستقل و پرسرعت v14</div>
+  <div class="subhead">مجموعه خودرویی پورمند — نسخه فیکس شده متون v15</div>
 
-  <!-- COVER PANEL -->
   <div class="panel" id="cover-panel">
     <div class="panel-title"><span>اسلاید کاور اصلی</span></div>
     <label>تاریخ روی کاور</label>
@@ -90,19 +89,17 @@
     </div>
   </div>
 
-  <!-- CONTACTS PANEL -->
   <div class="panel">
     <div class="panel-title"><span>مدیریت مخاطبین و پاسخ‌دهندگان</span></div>
     <div id="contacts-list"></div>
     <button class="action btn-add" onclick="addContact()">+ افزودن مخاطب جدید</button>
   </div>
 
-  <!-- CARS CONTAINER -->
   <div id="cars-container"></div>
 
   <button class="action btn-add" style="background: linear-gradient(135deg, #1A305C 0%, #0C172E 100%); color: #E5C173; font-weight:700; box-shadow: 0 4px 15px rgba(0,0,0,0.4);" onclick="addCar()">✨ افزودن خودرو جدید به لیست</button>
 
-  <div class="note">طراحی اختصاصی لوکس برای پیج پورمند — سرعت رندر آنی بدون مصرف اینترنت.</div>
+  <div class="note">طراحی اختصاصی لوکس برای پیج پورمند — همپوشانی متون کاملاً برطرف شد.</div>
 </div>
 
 <script>
@@ -124,14 +121,14 @@ function bgGradient(ctx){
 
 function drawBrandFooter(ctx){
   ctx.save();
-  const boxW=920, boxH=120, boxX=540-boxW/2, boxY=915, r=24;
+  const boxW=920, boxH=115, boxX=540-boxW/2, boxY=925, r=24;
   ctx.shadowColor = 'rgba(0, 0, 0, 0.7)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 15;
   roundedRect(ctx,boxX,boxY,boxW,boxH,r); ctx.fillStyle='#070E1C'; ctx.fill();
   ctx.shadowColor = 'transparent'; ctx.lineWidth=3.5; ctx.strokeStyle=GOLD;
   roundedRect(ctx,boxX,boxY,boxW,boxH,r); ctx.stroke();
   
-  ctx.fillStyle=GOLD; ctx.font='900 56px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.direction='rtl';
-  ctx.fillText('مجموعه خودرویی پورمند', 540, boxY + boxH/2 + 4);
+  ctx.fillStyle=GOLD; ctx.font='900 54px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.direction='rtl';
+  ctx.fillText('مجموعه خودرویی پورمند', 540, boxY + boxH/2 + 3);
   ctx.restore();
 }
 
@@ -157,7 +154,8 @@ function renderCover(){
 }
 
 function drawCarPhoto(ctx, car) {
-  const x=60,y=60,w=960,h=560,r=32;
+  // ارتفاع عکس را از ۵۶۰ به ۵۰۰ رساندیم تا فضای متن‌ها کاملاً باز شود
+  const x=60, y=55, w=960, h=500, r=32;
   roundedRect(ctx,x,y,w,h,r); ctx.save(); ctx.clip();
   
   if (car.img) {
@@ -165,13 +163,11 @@ function drawCarPhoto(ctx, car) {
     const iw=car.img.width*scale, ih=car.img.height*scale;
     ctx.drawImage(car.img, x+(w-iw)/2, y+(h-ih)/2, iw, ih);
   } else {
-    // قالب خام آتلیه‌ای فوق‌العاده شیک و مینیمال برای برند پورمند
     const g = ctx.createLinearGradient(x, y, x, y+h);
     g.addColorStop(0, '#0F1E36'); g.addColorStop(1, '#060B14');
     ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
     
-    // المان‌های گرافیکی لوکس درون کادر تصویر خالی
-    ctx.strokeStyle = 'rgba(229, 193, 115, 0.15)'; ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(229, 193, 115, 0.12)'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+w, y+h); ctx.moveTo(x+w, y); ctx.lineTo(x, y+h); ctx.stroke();
     
     ctx.fillStyle = GOLD; ctx.font = '500 34px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign = 'center';
@@ -182,7 +178,7 @@ function drawCarPhoto(ctx, car) {
 }
 
 let carCount=0; const cars={}; let contacts=[];
-const CONTACTS_KEY='pourmand-contacts-v14';
+const CONTACTS_KEY='pourmand-contacts-v15';
 const DEFAULT_CONTACTS=[
   {id:0,name:'علی‌اصغر پورمند',phone:'۰۹۱۴۶۴۰۱۱۲۰'},
   {id:1,name:'علی‌اصغر پورمند',phone:'۰۹۱۰۴۰۴۴۴۹۲'},
@@ -229,112 +225,8 @@ function drawCar(ctx,car){
   drawCarPhoto(ctx, car);
 
   ctx.direction='rtl'; ctx.fillStyle=CREAM; ctx.font='900 58px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center';
-  ctx.fillText(car.name||'نام خودروی شما',540,715);
+  // اسم ماشین آمد روی مختصات ۶۱۰
+  ctx.fillText(car.name||'نام خودروی شما',540,610);
 
   let metaParts = [];
-  if(car.model) metaParts.push("مدل " + car.model);
-  if(car.color) metaParts.push("رنگ " + car.color);
-  if(car.status) metaParts.push(car.status);
-  
-  const combinedMeta = metaParts.join('  |  ');
-  if(combinedMeta){ ctx.fillStyle=GOLD; ctx.font='700 32px Vazirmatn, Tahoma, sans-serif'; ctx.fillText(combinedMeta,540,772); }
-
-  if(car.priceMode==='call' && car.contactId){
-    const c=contacts.find(x=>String(x.id)===String(car.contactId));
-    if(c){
-      const plaqueW=800,plaqueH=125,plaqueY=810,plaqueX=540-plaqueW/2;
-      roundedRect(ctx,plaqueX,plaqueY,plaqueH,20); ctx.fillStyle=GOLD; ctx.fill();
-      ctx.fillStyle=BG_DARK; ctx.font='900 38px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center';
-      ctx.fillText('جهت استعلام قیمت تماس بگیرید',540,plaqueY+50);
-      ctx.font='700 32px Vazirmatn, Tahoma, sans-serif'; ctx.fillText(c.name + ' : ' + c.phone,540,plaqueY+95);
-    }
-  } else if(car.price){
-    const plaqueW=700,plaqueH=105,plaqueY=820,plaqueX=540-plaqueW/2;
-    roundedRect(ctx,plaqueX,plaqueY,plaqueH,20); ctx.fillStyle=GOLD; ctx.fill();
-    ctx.fillStyle=BG_DARK; ctx.font='900 48px Vazirmatn, Tahoma, sans-serif'; ctx.textAlign='center';
-    ctx.fillText(car.price + ' تومان',540,plaqueY+68);
-  }
-
-  if(car.desc){ ctx.fillStyle=SLATE; ctx.font='500 30px Vazirmatn, Tahoma, sans-serif'; ctx.fillText(car.desc,540,920); }
-  drawBrandFooter(ctx);
-}
-
-function renderCar(id){ const canvas=document.getElementById('canvas-'+id); if(!canvas) return; drawCar(canvas.getContext('2d'), cars[id]); }
-function renderAllCars(){ Object.keys(cars).forEach(id=>renderCar(id)); }
-
-function setPriceMode(id, mode){
-  cars[id].priceMode = mode;
-  const manualBtn=document.getElementById('manual-btn-'+id), callBtn=document.getElementById('call-btn-'+id);
-  const manualField=document.getElementById('manual-field-'+id), callField=document.getElementById('call-field-'+id);
-  if(mode==='manual'){
-    manualBtn.classList.add('active'); callBtn.classList.remove('active');
-    manualField.style.display='block'; callField.style.display='none';
-  } else {
-    callBtn.classList.add('active'); manualBtn.classList.remove('active');
-    callField.style.display='block'; manualField.style.display='none';
-  }
-  renderCar(id);
-}
-
-function addCar(){
-  carCount++; const id=carCount;
-  cars[id]={ id:id, name:'', price:'', model:'', color:'', status:'', desc:'', img:null, priceMode:'manual', contactId:'' };
-
-  const container=document.getElementById('cars-container');
-  const panel=document.createElement('div'); panel.className='panel'; panel.id='panel-'+id;
-  panel.innerHTML = `
-    <div class="panel-title"><span>اسلاید خودرو شماره ${id}</span><button class="action btn-danger" onclick="removeCar(${id})">حذف خودرو</button></div>
-    
-    <label>نام خودرو</label>
-    <input type="text" id="name-${id}" placeholder="مثلاً دنا پلاس توربو" oninput="cars[${id}].name=this.value; renderCar(${id})">
-
-    <div class="row3" style="margin-top:10px;">
-      <div><label>مدل (سال)</label><input type="text" id="model-${id}" placeholder="۱۴۰۵" oninput="cars[${id}].model=this.value; renderCar(${id})"></div>
-      <div><label>رنگ خودرو</label><input type="text" id="color-${id}" placeholder="مشکی متالیک" oninput="cars[${id}].color=this.value; renderCar(${id})"></div>
-      <div><label>وضعیت بدنه</label><input type="text" id="status-${id}" placeholder="بی‌رنگ" oninput="cars[${id}].status=this.value; renderCar(${id})"></div>
-    </div>
-
-    <label style="margin-top:14px;">تنظیمات قیمت گذاری</label>
-    <div class="toggle-row">
-      <button class="toggle-btn active" id="manual-btn-${id}" onclick="setPriceMode(${id},'manual')">درج قیمت عددی</button>
-      <button class="toggle-btn" id="call-btn-${id}" onclick="setPriceMode(${id},'call')">تماس بگیرید</button>
-    </div>
-
-    <div class="row2" style="margin-top:10px;">
-      <div id="manual-field-${id}"><label>قیمت (تومان)</label><input type="text" id="price-${id}" placeholder="۹۵۰,۰۰۰,۰۰۰" oninput="cars[${id}].price=this.value; renderCar(${id})"></div>
-      <div id="call-field-${id}" style="display:none;"><label>مسئول پاسخ‌گویی</label><select id="contact-select-${id}" onchange="cars[${id}].contactId=this.value; renderCar(${id})">${contactOptionsHtml('')}</select></div>
-    </div>
-
-    <label>توضیحات اختیاری</label>
-    <input type="text" id="desc-${id}" placeholder="فول آپشن، تحویل روز" oninput="cars[${id}].desc=this.value; renderCar(${id})">
-
-    <label class="file-btn" id="filelabel-${id}">📁 بارگذاری مستقیم عکس واقعی از گالری گوشی</label>
-    <input type="file" accept="image/*" id="file-${id}" onchange="handleImage(${id}, this)">
-    
-    <div class="preview-wrap" onclick="document.getElementById('file-${id}').click()"><canvas id="canvas-${id}" width="1080" height="1080"></canvas></div>
-    <div style="margin-top:16px;"><button class="action btn-primary" onclick="downloadCanvas('canvas-${id}','خودرو-${id}')">⬇ دانلود سریع این اسلاید</button></div>
-  `;
-  container.appendChild(panel);
-  document.getElementById('filelabel-'+id).addEventListener('click', ()=>{ document.getElementById('file-'+id).click(); });
-  renderCar(id);
-}
-
-function removeCar(id){ document.getElementById('panel-'+id).remove(); delete cars[id]; }
-function handleImage(id, input){
-  const file=input.files[0]; if(!file) return;
-  const reader=new FileReader(); reader.onload=function(e){
-    const img=new Image(); img.onload=function(){ cars[id].img=img; renderCar(id); }; img.src=e.target.result;
-  }; reader.readAsDataURL(file);
-}
-function downloadCanvas(canvasId, baseName){
-  const c=document.getElementById(canvasId); const link=document.createElement('a');
-  link.download=baseName+'.png'; link.href=c.toDataURL('image/png'); link.click();
-}
-
-window.onload = function() {
-  loadContacts(); renderContactsList();
-  document.fonts.ready.then(() => { renderCover(); addCar(); });
-};
-</script>
-</body>
-</html>
+  if(car.model)
