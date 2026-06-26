@@ -408,10 +408,17 @@ function handleImage(id, input){
 
 function downloadCanvas(canvasId, filenameBase){
   const canvas=document.getElementById(canvasId);
-  const link=document.createElement('a');
-  link.download=filenameBase+'.png';
-  link.href=canvas.toDataURL('image/png');
-  link.click();
+  canvas.toBlob(function(blob){
+    if(!blob) return;
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.download=filenameBase+'.png';
+    link.href=url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(()=>URL.revokeObjectURL(url), 4000);
+  }, 'image/png');
 }
 
 // init
