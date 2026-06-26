@@ -3,128 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>ساخت کاروسل موجودی | پورمند</title>
+<title>پنل اختصاصی پورمند | تولید اسلایدهای لوکس</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; transition: all 0.2s ease; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
   body {
-    margin: 0; font-family: 'Vazirmatn', Tahoma, sans-serif;
-    background: #050911; color: #F5F7FA; min-height: 100vh;
-    padding: 24px 16px 80px;
-    background-image: radial-gradient(circle at top right, #0F1F3D 0%, #050911 80%);
+    background-color: #030712; color: #F3F4F6; padding: 20px 12px 60px; min-height: 100vh;
+    background-image: radial-gradient(circle at 50% 0%, #0B1528 0%, #030712 75%);
   }
-  .container { max-width: 500px; margin: 0 auto; }
-  h1 { font-size: 24px; text-align: center; margin: 10px 0 4px; color: #E5C173; font-weight: 900; }
-  .subhead { text-align: center; font-size: 13px; color: #7C8BA8; margin-bottom: 28px; }
+  .app-container { max-width: 480px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 24px; padding: 10px 0; }
+  header h1 { font-size: 22px; color: #F59E0B; font-weight: 900; }
+  header p { font-size: 12px; color: #9CA3AF; margin-top: 4px; }
   
-  .panel { 
-    background: rgba(11, 20, 38, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(229, 193, 115, 0.25); border-radius: 24px; padding: 22px; margin-bottom: 24px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+  .card-panel {
+    background: rgba(17, 24, 39, 0.9); border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 20px; padding: 20px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
-  .panel-title { font-size: 15px; color: #E5C173; margin: 0 0 18px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; }
+  .panel-header { font-size: 14px; font-weight: 700; color: #F59E0B; padding-bottom: 10px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; }
   
-  label { display: block; font-size: 12.5px; color: #BAC4D6; margin: 14px 0 6px; font-weight: 500; }
+  label { display: block; font-size: 12px; color: #D1D5DB; margin: 12px 0 6px; font-weight: 500; }
   input[type=text], select {
-    width: 100%; padding: 14px; border-radius: 14px; border: 1px solid #1E335C;
-    background: #08101E; color: #F5F7FA; font-family: inherit; font-size: 14px; direction: rtl;
+    width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #1F2937;
+    background: #0B1329; color: #FFF; font-size: 13.5px; direction: rtl; outline: none;
   }
-  input:focus, select:focus { outline: none; border-color: #E5C173; background: #0C182E; }
+  input:focus, select:focus { border-color: #F59E0B; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15); }
   
-  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   
-  .file-btn {
+  .pricing-tabs { display: flex; gap: 6px; margin: 6px 0; background: #030712; padding: 4px; border-radius: 12px; border: 1px solid #1F2937; }
+  .tab-btn { flex: 1; padding: 10px; border-radius: 8px; font-size: 12.5px; border: none; background: transparent; color: #9CA3AF; cursor: pointer; font-weight: 500; }
+  .tab-btn.active { background: #1F2937; color: #F59E0B; font-weight: 700; }
+  
+  .upload-trigger {
     display: flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; padding: 14px; text-align: center; border-radius: 14px;
-    border: 1px dashed rgba(229, 193, 115, 0.4); background: rgba(229, 193, 115, 0.03); color: #E5C173; font-size: 13px; cursor: pointer; margin-top: 14px; font-weight: 600;
+    width: 100%; padding: 12px; text-align: center; border-radius: 12px;
+    border: 1px dashed rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.02); color: #F59E0B; font-size: 12.5px; cursor: pointer; margin-top: 12px; font-weight: 600;
   }
+  .upload-trigger:hover { background: rgba(245, 158, 11, 0.06); }
   input[type=file] { display: none; }
   
-  .preview-wrap { margin-top: 18px; border-radius: 20px; overflow: hidden; border: 1px solid #253D6B; cursor: pointer; position: relative; }
-  .preview-wrap canvas { width: 100%; display: block; background: #050911; }
+  .canvas-container { margin-top: 16px; border-radius: 16px; overflow: hidden; border: 1px solid #1F2937; box-shadow: 0 15px 35px rgba(0,0,0,0.7); position: relative; }
+  .canvas-container canvas { width: 100%; display: block; background: #030712; }
   
-  button.action {
-    font-family: inherit; border: none; border-radius: 14px; padding: 14px 18px; font-size: 14px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600;
-  }
-  .btn-primary { background: linear-gradient(135deg, #E5C173 0%, #C6A255 100%); color: #050911; width: 100%; box-shadow: 0 5px 18px rgba(229, 193, 115, 0.3); }
-  .btn-danger { background: rgba(192, 86, 106, 0.12); color: #E57385; border: 1px solid rgba(192, 86, 106, 0.25); padding: 6px 12px; font-size: 12px; border-radius: 8px; }
-  .btn-add { width: 100%; background: #0D182E; color: #E5C173; border: 1px solid rgba(229, 193, 115, 0.3); padding: 16px; font-size: 14px; margin-top: 8px; border-radius: 16px; }
+  .btn-action { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 16px; font-size: 13.5px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; width: 100%; margin-top: 14px; font-family: inherit; }
+  .btn-gold { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #030712; box-shadow: 0 4px 14px rgba(245,158,11,0.25); }
+  .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,158,11,0.35); }
+  .btn-dark-add { background: #111827; color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 14px; margin-top: 8px; border-radius: 14px; font-size: 13.5px; }
+  .btn-delete { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.25); padding: 5px 10px; font-size: 11.5px; border-radius: 6px; font-weight: 500; width: auto; margin: 0; }
   
-  .toggle-row { display: flex; gap: 8px; margin-top: 6px; background: #08101E; padding: 5px; border-radius: 14px; border: 1px solid #1E335C; }
-  .toggle-btn { flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; cursor: pointer; background: transparent; color: #7C8BA8; border: none; font-family: inherit; }
-  .toggle-btn.active { background: #1E335C; color: #E5C173; font-weight: 600; }
-  
-  .contact-row { display: flex; gap: 10px; margin-top: 10px; align-items: flex-end; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 14px; }
-  .note { font-size: 12px; color: #62718E; margin-top: 12px; text-align: center; }
+  .contact-box { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 12px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.04); display: flex; gap: 8px; }
+  .footer-credit { font-size: 11px; color: #4B5563; text-align: center; margin-top: 24px; }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>ساخت کاروسل موجودی روزانه</h1>
-  <div class="subhead">مجموعه خودرویی پورمند — نسخه ۱۰۰٪ ثابت و تضمینی v17</div>
+<div class="app-container">
+  <header>
+    <h1>طراح هوشمند کاروسل پورمند</h1>
+    <p>نسخه بازطراحی شده مستقل عاری از خطا — v17</p>
+  </header>
 
-  <div class="panel" id="cover-panel">
-    <div class="panel-title"><span>اسلاید کاور اصلی</span></div>
-    <label>تاریخ روی کاور</label>
-    <input type="text" id="coverDate" placeholder="مثلاً ۵ تیر ۱۴۰۵" oninput="renderCover()" />
-    <label>متن زیر تاریخ</label>
-    <input type="text" id="coverSub" value="موجودی امروز نمایشگاه" oninput="renderCover()" />
-    <div class="preview-wrap"><canvas id="coverCanvas" width="1080" height="1080"></canvas></div>
-    <div style="margin-top:16px;">
-      <button class="action btn-primary" onclick="downloadCanvas('coverCanvas','کاور-موجودی')">⬇ دانلود اسلاید کاور</button>
-    </div>
+  <div class="card-panel">
+    <div class="panel-header"><span>۱. اسلاید کاور ورودی</span></div>
+    <label>تاریخ دقیق امروز</label>
+    <input type="text" id="coverDate" placeholder="مثلاً ۶ تیر ۱۴۰۵" oninput="renderCover()">
+    <label>متن دوم روی کاور</label>
+    <input type="text" id="coverSub" value="موجودی جدید امروز نمایشگاه" oninput="renderCover()">
+    
+    <div class="canvas-container"><canvas id="coverCanvas" width="1080" height="1080"></canvas></div>
+    <button class="btn-action btn-gold" onclick="downloadCanvas('coverCanvas', 'کاور-موجودی')">⬇ دانلود اسلاید کاور</button>
   </div>
 
-  <div class="panel">
-    <div class="panel-title"><span>مدیریت مخاطبین و پاسخ‌دهندگان</span></div>
+  <div class="card-panel">
+    <div class="panel-header"><span>مدیریت کارشناسان فروش نمایشگاه</span></div>
     <div id="contacts-list"></div>
-    <button class="action btn-add" onclick="addContact()">+ افزودن مخاطب جدید</button>
   </div>
 
-  <div id="cars-container">
-    <div class="panel" id="panel-1">
-      <div class="panel-title"><span>اسلاید خودرو شماره ۱</span></div>
+  <div id="cars-wrapper">
+    <div class="card-panel" id="car-panel-1">
+      <div class="panel-header"><span>۲. اسلاید خودرو شماره ۱</span></div>
       
-      <label>نام خودرو</label>
-      <input type="text" id="name-1" placeholder="مثلاً دنا پلاس توربو" oninput="updateCarData(1, 'name', this.value)">
+      <label>نام و برند خودرو</label>
+      <input type="text" id="name-1" placeholder="مثلاً کیا اپتیما GT Line" oninput="syncCarData(1, 'name', this.value)">
 
-      <div class="row3" style="margin-top:10px;">
-        <div><label>مدل (سال)</label><input type="text" id="model-1" placeholder="۱۴۰۵" oninput="updateCarData(1, 'model', this.value)"></div>
-        <div><label>رنگ خودرو</label><input type="text" id="color-1" placeholder="مشکی متالیک" oninput="updateCarData(1, 'color', this.value)"></div>
-        <div><label>وضعیت بدنه</label><input type="text" id="status-1" placeholder="بی‌رنگ" oninput="updateCarData(1, 'status', this.value)"></div>
+      <div class="grid-3" style="margin-top:8px;">
+        <div><label>مدل خودرو</label><input type="text" id="model-1" placeholder="۲۰۱۷" oninput="syncCarData(1, 'model', this.value)"></div>
+        <div><label>رنگ بدنه</label><input type="text" id="color-1" placeholder="سفید صدفی" oninput="syncCarData(1, 'color', this.value)"></div>
+        <div><label>وضعیت رنگ</label><input type="text" id="status-1" placeholder="دو لکه رنگ" oninput="syncCarData(1, 'status', this.value)"></div>
       </div>
 
-      <label style="margin-top:14px;">تنظیمات قیمت گذاری</label>
-      <div class="toggle-row">
-        <button class="toggle-btn active" id="manual-btn-1" onclick="setPriceMode(1,'manual')">درج قیمت عددی</button>
-        <button class="toggle-btn" id="call-btn-1" onclick="setPriceMode(1,'call')">تماس بگیرید</button>
+      <label style="margin-top:12px;">نحوه درج قیمت اسلاید</label>
+      <div class="pricing-tabs">
+        <button class="tab-btn active" id="tab-num-1" onclick="setCarPriceStyle(1, 'manual')">قیمت مشخص عددی</button>
+        <button class="tab-btn" id="tab-call-1" onclick="setCarPriceStyle(1, 'call')">تماس بگیرید / استعلام</button>
       </div>
 
-      <div class="row2" style="margin-top:10px;">
-        <div id="manual-field-1"><label>قیمت (تومان)</label><input type="text" id="price-1" placeholder="۹۵۰,۰۰۰,۰۰۰" oninput="updateCarData(1, 'price', this.value)"></div>
-        <div id="call-field-1" style="display:none;"><label>مسئول پاسخ‌گویی</label><select id="contact-select-1" onchange="updateCarData(1, 'contactId', this.value)"></select></div>
+      <div style="margin-top:8px;">
+        <div id="box-num-1"><label>قیمت (تومان)</label><input type="text" id="price-1" placeholder="۳,۴۰۰,۰۰۰,۰۰۰" oninput="syncCarData(1, 'price', this.value)"></div>
+        <div id="box-call-1" style="display:none;"><label>کارشناس پاسخگو</label><select id="select-contact-1" onchange="syncCarData(1, 'contactId', this.value)"></select></div>
       </div>
 
-      <label>توضیحات اختیاری</label>
-      <input type="text" id="desc-1" placeholder="فول آپشن، تحویل روز" oninput="updateCarData(1, 'desc', this.value)">
+      <label>توضیحات تکمیلی (خط آخر)</label>
+      <input type="text" id="desc-1" placeholder="فول شرکتی، سقف پانوراما، بسیار تمیز" oninput="syncCarData(1, 'desc', this.value)">
 
-      <label class="file-btn" onclick="document.getElementById('file-1').click()">📁 بارگذاری مستقیم عکس واقعی از گالری گوشی</label>
-      <input type="file" accept="image/*" id="file-1" onchange="handleImage(1, this)">
-      
-      <div class="preview-wrap" onclick="document.getElementById('file-1').click()"><canvas id="canvas-1" width="1080" height="1080"></canvas></div>
-      <div style="margin-top:16px;"><button class="action btn-primary" onclick="downloadCanvas('canvas-1','خودرو-1')">⬇ دانلود سریع این اسلاید</button></div>
+      <label class="upload-trigger" onclick="document.getElementById('file-1').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
+      <input type="file" accept="image/*" id="file-1" onchange="processCarImage(1, this)">
+
+      <div class="canvas-container" onclick="document.getElementById('file-1').click()"><canvas id="canvas-1" width="1080" height="1080"></canvas></div>
+      <button class="btn-action btn-gold" onclick="downloadCanvas('canvas-1', 'خودرو-1')">⬇ دانلود اسلاید خودرو ۱</button>
     </div>
   </div>
 
-  <button class="action btn-add" style="background: linear-gradient(135deg, #1A305C 0%, #0C172E 100%); color: #E5C173; font-weight:700;" onclick="addNewCarDynamic()">✨ افزودن خودرو جدید به لیست (ماشین‌های بعدی)</button>
-
-  <div class="note">نسخه v17 — کادرهای اطلاعات خودرو کاملاً قفل و بدون خطای غیب شدن هستند.</div>
+  <button class="btn-action btn-dark-add" onclick="createNewCarSlot()">✨ افزودن خودرو جدید به لیست موجودی</button>
+  <div class="footer-credit">طراحی لوکس اختصاصی مجموعه خودرویی پورمند</div>
 </div>
 
 <script>
-const BG
+const CANVAS_SIZE = 1080;
+const COLOR_BG_DARK = '#050911', COLOR_GOLD = '#E5C173', COLOR_GOLD_DIM = '#B8964A', COLOR_TEXT_LIGHT = '#FFFFFF', COLOR_SLATE = '#94A3B8';
+
+let totalCarsCreated = 1;
+const carsDatabase = {
+  1: { id: 1, name: '', model: '', color: '', status: '', price: '', desc: '', priceMode: 'manual', contactId: '', imgObject: null }
+};
+
+const salesTeam = [
+  { id: 'p1', name: 'علی‌اصغر پورمند', phone: '۰۹۱۴۶۴۰۱۱۲۰' },
+  { id: 'p2', name: 'علی‌اصغر پورمند', phone: '۰۹۱۰۴۰۴۴۴۹۲' },
+  { id: 'p3', name: 'خانم انوشه', phone: '۰۹۱۴۸۵۰۵۰۷۵' },
+  { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶۲۳۹۵۲۴' }
+];
+
+function drawPerfectRoundedRect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function applyLuxuryBackground(ctx) {
+  const grad = ctx.createRadialGradient(CANVAS_SIZE/2, CANVAS_SIZE/3, 50, CANVAS_SIZE/2, CANVAS_SIZE/2, CANVAS_SIZE*0.75);
+  grad.addColorStop(0, '#0F203D'); grad.addColorStop(0.6, '#060C16'); grad.addColorStop(1, '#03050A');
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  ctx.strokeStyle = 'rgba(229, 193, 115, 0.04)'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(CANVAS_SIZE/2, CANVAS_SIZE/2, 475, 0, Math.PI * 2); ctx.stroke();
+}
+
+function drawBrandFooterFixed(ctx) {
+  ctx.save();
+  const w = 920, h = 115, x = 540 - w/2, y = 925, radius = 24;
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.8)'; ctx.shadowBlur = 35; ctx.shadowOffsetY = 12;
+  drawPerfectRoundedRect(ctx, x, y, w, h, radius); ctx.fillStyle = '#060B14'; ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.lineWidth = 3.5; ctx.strokeStyle = COLOR_GOLD;
+  drawPerfectRoundedRect(ctx, x, y, w, h, radius); ctx.stroke();
+  ctx.fillStyle = COLOR_GOLD; ctx.font = '900 54px Vazirmatn, Tahoma'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
+  ctx.fillText('مجموعه خودرویی پورمند', 540, y + h/2 + 3);
+  ctx.restore();
+}
+
+function renderCover() {
+  const canvas = document.getElementById('coverCanvas'); if(!canvas) return;
+  const ctx = canvas.getContext('2d'); applyLuxuryBackground(ctx);
+  ctx.save(); ctx.translate(540, 340);
+  ctx.strokeStyle = COLOR_GOLD; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, 0, 165, 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = COLOR_GOLD_DIM; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, 182, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = COLOR_GOLD; ctx.textAlign = 'center'; ctx.direction = 'rtl';
+  ctx.font = '900 76px Vazirmatn, Tahoma'; ctx.fillText('موجودی', 0, -15);
+  ctx.font = '700 54px Vazirmatn, Tahoma'; ctx.fillText('امروز', 0, 65); ctx.restore();
+  const dateStr = document.getElementById('coverDate').value || 'امروز';
+  ctx.fillStyle = COLOR_TEXT_LIGHT; ctx.font = '700 54px Vazirmatn, Tahoma'; ctx.textAlign = 'center'; ctx.direction = 'rtl';
+  ctx.fillText(dateStr, 540, 620);
+  const subStr = document.getElementById('coverSub').value || 'موجودی امروز نمایشگاه';
+  if(subStr) { ctx.fillStyle = COLOR_GOLD; ctx.font = '500 36px Vazirmatn, Tahoma'; ctx.fillText(subStr, 540, 685); }
+  ctx.fillStyle = COLOR_SLATE; ctx.font = '400 32px Vazirmatn, Tahoma'; ctx.fillText('برای مشاهده مدل‌ها ورق بزنید ←', 540, 785);
+  drawBrandFooterFixed(ctx);
+}
+
+function buildSelectOptions(chosenId) {
+  let markup = '<option value="">انتخاب کارشناس فروش...</option>';
+  salesTeam.forEach(t => { const active = (String(chosenId) === t.id) ? 'selected' : ''; markup += `<option value="${t.id}" ${active}>${t.name} (${t.phone})</option>`; });
+  return markup;
+}
+
+function syncCarData(id, field, text) {
+  if(carsDatabase[id]) { carsDatabase[id][field] = text; renderCarSlide(id); }
+}
+
+function renderCarSlide(id) {
+  const canvas = document.getElementById('canvas-' + id); if(!canvas) return;
+  const ctx = canvas.getContext('2d'); const data = carsDatabase[id];
+  ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE); applyLuxuryBackground(ctx);
+
+  // جایگاه کاملاً مهندسی شده عکس خودرو (مختصات ۵۵ تا ۵۵۵)
+  const px = 60, py = 55, pw = 960, ph = 500, pr = 32;
+  drawPerfectRoundedRect(ctx, px, py, pw, ph, pr); ctx.save(); ctx.clip();
+  if(data && data.imgObject) {
+    const ratio = Math.max(pw / data.imgObject.width, ph / data.imgObject.height);
+    const w = data.imgObject.width * ratio, h = data.imgObject.height * ratio;
+    ctx.drawImage(data.imgObject, px + (pw - w)/2, py + (ph - h)/2, w, h);
+  } else {
+    const g = ctx.createLinearGradient(px, py, px, py + ph); g.addColorStop(0, '#0F1A2E'); g.addColorStop(1, '#050A14');
+    ctx.fillStyle = g; ctx.fillRect(px, py, pw, ph);
+    ctx.strokeStyle = 'rgba(229, 193, 115, 0.15)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px+pw, py+ph); ctx.moveTo(px+pw, py); ctx.lineTo(px, py+ph); ctx.stroke();
+    ctx.fillStyle = COLOR_GOLD; ctx.font = '500 34px Vazirmatn'; ctx.textAlign = 'center'; ctx.fillText('📸 تصویر واقعی خودرو روی اسلاید', 540, py + ph/2 + 12);
+  }
+  ctx.restore(); ctx.strokeStyle = COLOR_GOLD; ctx.lineWidth = 4; drawPerfectRoundedRect(ctx, px, py, pw, ph, pr); ctx.stroke();
+
+  // متون با فواصل ایمن و کاملاً مستقل تفکیک شده
+  ctx.direction = 'rtl'; ctx.textAlign = 'center';
+  ctx.fillStyle = COLOR_TEXT_LIGHT; ctx.font = '900 58px Vazirmatn';
+  ctx.fillText(data.name || 'نام خودروی انتخابی', 540, 610);
+
+  let badges = [];
+  if(data.model) badges.push("مدل " + data.model);
+  if(data.color) badges.push("رنگ " + data.color);
+  if(data.status) badges.push(data.status);
+  const metaString = badges.join('  |  ');
+  if(metaString) { ctx.fillStyle = COLOR_GOLD; ctx.font = '700 32px Vazirmatn'; ctx.fillText(metaString, 540, 670); }
+
+  // پلاک هوشمند قیمت گذاری (جایگاه مرکزی عددی یا استعلامی)
+  if(data.priceMode === 'call') {
+    const agent = salesTeam.find(x => x.id === data.contactId);
+    const pW = 840, pH = 115, pY = 715, pX = 540 - pW/2;
+    drawPerfectRoundedRect(ctx, pX, pY, pW, pH, 22); ctx.fillStyle = COLOR_GOLD; ctx.fill();
+    ctx.fillStyle = '#050911'; ctx.font = '900 35px Vazirmatn';
+    ctx.fillText('جهت استعلام قیمت روز تماس بگیرید', 540, pY + 45);
+    if(agent) { ctx.font = '700 31px Vazirmatn'; ctx.fillText(`${agent.name} : ${agent.phone}`, 540, pY + 86); }
+  } else if(data.price) {
+    const pW = 720, pH = 95, pY = 725, pX = 540 - pW/2;
+    drawPerfectRoundedRect(ctx, pX, pY, pW, pH, 20); ctx.fillStyle = COLOR_GOLD; ctx.fill();
+    ctx.fillStyle = '#050911'; ctx.font = '900 46px Vazirmatn';
+    ctx.fillText(data.price + ' تومان', 540, pY + 63);
+  }
+
+  // بخش توضیحات فرعی (دقیقاً بالاتر از هدر با فضای ۸۰ پیکسلی خالی)
+  if(data.desc) { ctx.fillStyle = COLOR_SLATE; ctx.font = '500 30px Vazirmatn'; ctx.fillText(data.desc, 540, 875); }
+
+  // باکس برند در مختصات قفل شده پایین ۹۲۵
+  drawBrandFooterFixed(ctx);
+}
+
+function setCarPriceStyle(id, mode) {
+  if(!carsDatabase[id]) return; carsDatabase[id].priceMode = mode;
+  const btnNum = document.getElementById('tab-num-' + id), btnCall = document.getElementById('tab-call-' + id);
+  const boxNum = document.getElementById('box-num-' + id), boxCall = document.getElementById('box-call-' + id);
+  if(mode === 'manual') {
+    if(btnNum) btnNum.classList.add('active'); if(btnCall) btnCall.classList.remove('active');
+    if(boxNum) boxNum.style.display = 'block'; if(boxCall) boxCall.style.display = 'none';
+  } else {
+    if(btnCall) btnCall.classList.add('active'); if(btnNum) btnNum.classList.remove('active');
+    if(boxCall) boxCall.style.display = 'block'; if(boxNum) boxNum.style.display = 'none';
+  }
+  renderCarSlide(id);
+}
+
+function createNewCarSlot() {
+  totalCarsCreated++; const id = totalCarsCreated;
+  carsDatabase[id] = { id: id, name: '', model: '', color: '', status: '', price: '', desc: '', priceMode: 'manual', contactId: '', imgObject: null };
+  
+  const container = document.getElementById('cars-wrapper');
+  const panel = document.createElement('div'); panel.className = 'card-panel'; panel.id = 'car-panel-' + id;
+  panel.innerHTML = `
+    <div class="panel-header"><span>اسلاید خودرو شماره ${id}</span><button class="btn-action btn-delete" onclick="deleteCarSlot(${id})">حذف اسلاید</button></div>
+    <label>نام و برند خودرو</label>
+    <input type="text" id="name-${id}" placeholder="مثلاً دنا پلاس توربو" oninput="syncCarData(${id}, 'name', this.value)">
+    <div class="grid-3" style="margin-top:8px;">
+      <div><label>مدل</label><input type="text" id="model-${id}" oninput="syncCarData(${id}, 'model', this.value)"></div>
+      <div><label>رنگ</label><input type="text" id="color-${id}" oninput="syncCarData(${id}, 'color', this.value)"></div>
+      <div><label>وضعیت</label><input type="text" id="status-${id}" oninput="syncCarData(${id}, 'status', this.value)"></div>
+    </div>
+    <label style="margin-top:12px;">نحوه درج قیمت اسلاید</label>
+    <div class="pricing-tabs">
+      <button class="tab-btn active" id="tab-num-${id}" onclick="setCarPriceStyle(${id}, 'manual')">قیمت عددی</button>
+      <button class="tab-btn" id="tab-call-${id}" onclick="setCarPriceStyle(${id}, 'call')">تماس بگیرید</button>
+    </div>
+    <div style="margin-top:8px;">
+      <div id="box-num-${id}"><label>قیمت</label><input type="text" id="price-${id}" oninput="syncCarData(${id}, 'price', this.value)"></div>
+      <div id="box-call-${id}" style="display:none;"><label>کارشناس پاسخگو</label><select id="select-contact-${id}" onchange="syncCarData(${id}, 'contactId', this.value)">${buildSelectOptions('')}</select></div>
+    </div>
+    <label>توضیحات تکمیلی</label>
+    <input type="text" id="desc-${id}" oninput="syncCarData(${id}, 'desc', this.value)">
+    <label class="upload-trigger" onclick="document.getElementById('file-${id}').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
+    <input type="file" accept="image/*" id="file-${id}" onchange="processCarImage(${id}, this)">
+    <div class="canvas-container" onclick="document.getElementById('file-${id}').click()"><canvas id="canvas-${id}" width="1080" height="1080"></canvas></div>
+    <button class="btn-action btn-gold" onclick="downloadCanvas('canvas-${id}', 'خودرو-${id}')">⬇ دانلود اسلاید خودرو ${id}</button>
+  `;
+  container.appendChild(panel);
+  renderCarSlide(id);
+}
+
+function deleteCarSlot(id) {
+  const el = document.getElementById('car-panel-' + id); if(el) el.remove(); delete carsDatabase[id];
+}
+
+function processCarImage(id, input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader(); reader.onload = function(e) {
+    const img = new Image(); img.onload = function() { if(carsDatabase[id]) { carsDatabase[id].imgObject = img; renderCarSlide(id); } };
+    img.src = e.target.result;
+  }; reader.readAsDataURL(file);
+}
+
+function downloadCanvas(canvasId, name) {
+  const c = document.getElementById(canvasId); const a = document.createElement('a');
+  a.download = name + '.png'; a.href = c.toDataURL('image/png'); a.click();
+}
+
+window.onload = function() {
+  const contactWrap = document.getElementById('contacts-list');
+  salesTeam.forEach(t => {
+    const d = document.createElement('div'); d.className = 'contact-box';
+    d.innerHTML = `<span style="color:#F59E0B; font-weight:700;">${t.name}</span> <span style="color:#9CA3AF; margin-right:auto; direction:ltr;">${t.phone}</span>`;
+    contactWrap.appendChild(d);
+  });
+  
+  const sel1 = document.getElementById('select-contact-1'); if(sel1) sel1.innerHTML = buildSelectOptions('');
+  renderCover(); renderCarSlide(1);
+};
+</script>
+</body>
+</html>
