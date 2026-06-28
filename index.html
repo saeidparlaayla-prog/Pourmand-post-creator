@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>مجموعه خودرویی پورمند</title>
 
-<!-- لایه اتصال به مانیفست استاندارد PWA برای فعال شدن دکمه Install -->
-<link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIm1ham1vdWVoIGtob2Ryb2lpIHBvdXJtYW5kIiwKICAic2hvcnRfbmFtZSI6ICLQv9mI0LHZXZmGZCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDMwNzEyIiwKICAidGhlbWVfY29sb3IiOiAiIzAzMDcxMiIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PGNpcmNsZSBjeD0nMjU2JyBjeT0nMjU2JyByPScyNTYnIGZpbGw9JyMwMzA3MTInLz48dGV4dCB4PSc1MCUnIHk9JzU1JScgZm9udC1zaXplPSc5MCcgZmlsbD0nI0Y1OUUwQicgZm9udC1mYW1pbHk9J3RhaG9tYScgZm9udC13ZWlnaHQ9J2JvbGQnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGFsaWdubWVudC1iYXNlbGluZT0nbWlkZGxlJz7Zv9mI0LHZXZmGPC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
-
 <!-- تنظیمات اختصاصی iOS آیفون برای حالت Standalone -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +12,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap"></noscript>
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
@@ -71,11 +69,13 @@
   .contact-box { background: rgba(255,255,255,0.02); padding: 11px; border-radius: 12px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.04); display: flex; gap: 8px; }
   .footer-credit { font-size: 11px; color: #4B5563; text-align: center; margin-top: 24px; padding-bottom: 20px; }
   
-  .instruction-tag {
-    background: rgba(245, 158, 11, 0.1); color: #F59E0B; font-size: 12px;
-    padding: 8px; border-radius: 8px; text-align: center; margin-top: 8px;
-    font-weight: 600; display: none; border: 1px dashed rgba(245, 158, 11, 0.3);
+  .download-btn {
+    background: rgba(245, 158, 11, 0.12); color: #F59E0B; font-size: 13.5px;
+    padding: 12px; border-radius: 10px; text-align: center; margin-top: 8px;
+    font-weight: 700; display: none; border: 1px solid rgba(245, 158, 11, 0.35);
+    width: 100%; cursor: pointer; font-family: inherit;
   }
+  .download-btn:active { background: rgba(245, 158, 11, 0.22); }
 </style>
 </head>
 <body>
@@ -83,7 +83,7 @@
 <div class="app-container">
   <header>
     <h1>مجموعه خودرویی پورمند</h1>
-    <p>نسخه سوپر اپلیکیشن PWA استاندارد — v27</p>
+    <p>نسخه سوپر اپلیکیشن PWA استاندارد — v28</p>
   </header>
 
   <!-- COVER SLIDE -->
@@ -96,8 +96,8 @@
     
     <canvas id="coverCanvas" class="canvas-hidden" width="1080" height="1080"></canvas>
     
-    <button class="btn-action btn-gold" onclick="generateViewableImage('coverCanvas', 'cover-output', 'cover-instruct')">📸 ساخت و مشاهده تصویر کاور</button>
-    <div class="instruction-tag" id="cover-instruct">👇 انگشت خود را روی عکس زیر نگه دارید و گزینه بارگیری (Download) را بزنید</div>
+    <button class="btn-action btn-gold" onclick="generateViewableImage('coverCanvas', 'cover-output', 'cover-download', 'کاور-موجودی')">📸 ساخت و مشاهده تصویر کاور</button>
+    <button class="download-btn" id="cover-download" onclick="downloadOrShareImage('coverCanvas', 'کاور-موجودی')">⬇️ دانلود / اشتراک‌گذاری تصویر</button>
     <div class="output-image-container" id="cover-output" style="display:none;"></div>
   </div>
 
@@ -140,8 +140,8 @@
 
       <canvas id="canvas-1" class="canvas-hidden" width="1080" height="1080"></canvas>
       
-      <button class="btn-action btn-gold" onclick="generateViewableImage('canvas-1', 'output-1', 'instruct-1')">📸 ساخت و مشاهده تصویر خودرو ۱</button>
-      <div class="instruction-tag" id="instruct-1">👇 انگشت خود را روی عکس زیر نگه دارید و گزینه بارگیری (Download) را بزنید</div>
+      <button class="btn-action btn-gold" onclick="generateViewableImage('canvas-1', 'output-1', 'download-1', 'خودرو-۱')">📸 ساخت و مشاهده تصویر خودرو ۱</button>
+      <button class="download-btn" id="download-1" onclick="downloadOrShareImage('canvas-1', 'خودرو-۱')">⬇️ دانلود / اشتراک‌گذاری تصویر</button>
       <div class="output-image-container" id="output-1" style="display:none;"></div>
     </div>
   </div>
@@ -151,6 +151,44 @@
 </div>
 
 <script>
+// ⚙️ ساخت manifest به‌صورت زنده با Blob به‌جای base64 دستی
+// (روش قبلی به‌خاطر متن فارسی، بایت‌های خراب تولید می‌کرد و باعث می‌شد
+// مرورگر manifest را نامعتبر تشخیص بدهد و گزینه "نصب اپ" درست کار نکند)
+(function setupManifest() {
+  try {
+    const iconSvg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>" +
+      "<circle cx='256' cy='256' r='256' fill='#030712'/>" +
+      "<text x='50%' y='55%' font-size='90' fill='#F59E0B' font-family='tahoma' font-weight='bold' " +
+      "text-anchor='middle' alignment-baseline='middle'>پورمند</text></svg>";
+
+    const manifest = {
+      name: "مجموعه خودرویی پورمند",
+      short_name: "پورمند",
+      start_url: location.pathname,
+      scope: location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1) || "/",
+      display: "standalone",
+      background_color: "#030712",
+      theme_color: "#030712",
+      orientation: "portrait",
+      icons: [
+        {
+          src: "data:image/svg+xml," + encodeURIComponent(iconSvg),
+          sizes: "512x512",
+          type: "image/svg+xml"
+        }
+      ]
+    };
+
+    const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+    const link = document.createElement("link");
+    link.rel = "manifest";
+    link.href = URL.createObjectURL(blob);
+    document.head.appendChild(link);
+  } catch(err) {
+    console.warn('ساخت manifest انجام نشد، اما بقیه برنامه عادی کار می‌کند:', err);
+  }
+})();
+
 const CANVAS_SIZE = 1080;
 const COLOR_GOLD = '#E5C173', COLOR_GOLD_DIM = '#B8964A', COLOR_TEXT_LIGHT = '#FFFFFF', COLOR_SLATE = '#94A3B8';
 
@@ -323,8 +361,8 @@ function createNewCarSlot() {
     <label class="upload-trigger" onclick="document.getElementById('file-${id}').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
     <input type="file" accept="image/*" id="file-${id}" onchange="processCarImage(${id}, this)">
     <canvas id="canvas-${id}" class="canvas-hidden" width="1080" height="1080"></canvas>
-    <button class="btn-action btn-gold" onclick="generateViewableImage('canvas-${id}', 'output-${id}', 'instruct-${id}')">📸 ساخت و مشاهده تصویر خودرو ${id}</button>
-    <div class="instruction-tag" id="instruct-${id}">👇 انگشت خود را روی عکس زیر نگه دارید و گزینه بارگیری (Download) را بزنید</div>
+    <button class="btn-action btn-gold" onclick="generateViewableImage('canvas-${id}', 'output-${id}', 'download-${id}', 'خودرو-${id}')">📸 ساخت و مشاهده تصویر خودرو ${id}</button>
+    <button class="download-btn" id="download-${id}" onclick="downloadOrShareImage('canvas-${id}', 'خودرو-${id}')">⬇️ دانلود / اشتراک‌گذاری تصویر</button>
     <div class="output-image-container" id="output-${id}" style="display:none;"></div>
   `;
   container.appendChild(panel);
@@ -343,23 +381,48 @@ function processCarImage(id, input) {
   }; reader.readAsDataURL(file);
 }
 
-function generateViewableImage(canvasId, outputId, instructId) {
+function generateViewableImage(canvasId, outputId, downloadBtnId, filename) {
   const canvas = document.getElementById(canvasId);
   const outputContainer = document.getElementById(outputId);
-  const instructTag = document.getElementById(instructId);
+  const downloadBtn = document.getElementById(downloadBtnId);
   if(!canvas || !outputContainer) return;
   const dataUrl = canvas.toDataURL('image/png');
   outputContainer.innerHTML = `<img src="${dataUrl}" alt="Story Output">`;
   outputContainer.style.display = 'block';
-  if(instructTag) instructTag.style.display = 'block';
+  if(downloadBtn) downloadBtn.style.display = 'block';
   outputContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// ⚙️ اسکریپت جادویی سرویس ورکر استاندارد تزریق شده برای تایید سیستم‌عامل گوشی
-if ('serviceWorker' in navigator) {
-  const swCode = 'self.addEventListener("fetch", function(e){});';
-  const blob = new Blob([swCode], {type: 'text/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(blob));
+// دانلود واقعی عکس — به‌جای روش قبلی (نگه‌داشتن انگشت روی data URL که با حجم بالا
+// در خیلی از مرورگرهای موبایل بعد از اولین بار قطع می‌شد)، اینجا کنواس به Blob
+// تبدیل می‌شود و یا منوی اشتراک‌گذاری اندروید (که می‌تواند مستقیم Save to Gallery بزند)
+// باز می‌شود، یا در صورت نبود این قابلیت، دانلود مستقیم با لینک Blob انجام می‌شود.
+function downloadOrShareImage(canvasId, filename) {
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  canvas.toBlob(async function(blob) {
+    if(!blob) return;
+    const safeName = filename + '.png';
+    const file = new File([blob], safeName, { type: 'image/png' });
+
+    if(navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: safeName });
+        return;
+      } catch(err) {
+        // اگر کاربر منوی اشتراک را لغو کرد یا خطا داد، می‌رویم سراغ دانلود مستقیم
+      }
+    }
+
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = safeName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 8000);
+  }, 'image/png');
 }
 
 window.onload = function() {
@@ -373,6 +436,20 @@ window.onload = function() {
   const sel1 = document.getElementById('select-contact-1'); if(sel1) sel1.innerHTML = buildSelectOptions('');
   renderCover(); renderCarSlide(1);
 };
+
+// ⚙️ ثبت سرویس‌ورکر — کاملاً ایمن‌سازی شده، چون ثبت از روی blob: در بعضی
+// مرورگرها/وب‌ویوها مجاز نیست و نباید بقیه برنامه را تحت تأثیر قرار دهد
+try {
+  if ('serviceWorker' in navigator) {
+    const swCode = 'self.addEventListener("fetch", function(e){});';
+    const blob = new Blob([swCode], {type: 'text/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(function(err) {
+      console.warn('ثبت Service Worker انجام نشد (بدون تأثیر روی برنامه):', err);
+    });
+  }
+} catch(err) {
+  console.warn('ثبت Service Worker انجام نشد (بدون تأثیر روی برنامه):', err);
+}
 </script>
 </body>
 </html>
