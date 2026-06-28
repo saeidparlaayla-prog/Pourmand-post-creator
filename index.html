@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>اپلیکیشن پورمند</title>
+<title>مجموعه خودرویی پورمند</title>
 
+<!-- لایه اتصال به مانیفست استاندارد PWA برای فعال شدن دکمه Install -->
+<link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIm1ham1vdWVoIGtob2Ryb2lpIHBvdXJtYW5kIiwKICAic2hvcnRfbmFtZSI6ICLQv9mI0LHZXZmGZCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDMwNzEyIiwKICAidGhlbWVfY29sb3IiOiAiIzAzMDcxMiIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PGNpcmNsZSBjeD0nMjU2JyBjeT0nMjU2JyByPScyNTYnIGZpbGw9JyMwMzA3MTInLz48dGV4dCB4PSc1MCUnIHk9JzU1JScgZm9udC1zaXplPSc5MCcgZmlsbD0nI0Y1OUUwQicgZm9udC1mYW1pbHk9J3RhaG9tYScgZm9udC13ZWlnaHQ9J2JvbGQnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGFsaWdubWVudC1iYXNlbGluZT0nbWlkZGxlJz7Zv9mI0LHZXZmGPC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+
+<!-- تنظیمات اختصاصی iOS آیفون برای حالت Standalone -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="پورمند">
-<meta name="theme-color" content="#030712">
-
-<link rel="manifest" href='data:application/manifest+json,{"name":"مجموعه خودرویی پورمند","short_name":"پورمند","start_url":".","display":"standalone","background_color":"#030712","theme_color":"#030712","orientation":"portrait"}'>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
   body {
@@ -26,13 +27,6 @@
   header { text-align: center; margin-bottom: 16px; padding: 10px 0; }
   header h1 { font-size: 22px; color: #F59E0B; font-weight: 900; }
   header p { font-size: 11px; color: #6B7280; margin-top: 4px; }
-  
-  /* بنر نصب اپلیکیشن */
-  .install-banner {
-    background: linear-gradient(135deg, #065F46 0%, #064E3B 100%);
-    border: 1px solid #059669; border-radius: 16px; padding: 14px; margin-bottom: 16px;
-    text-align: center; display: none; box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
-  }
   
   .card-panel {
     background: rgba(17, 24, 39, 0.95); border: 1px solid rgba(245, 158, 11, 0.2);
@@ -71,7 +65,6 @@
   
   .btn-action { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 16px; font-size: 14px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; width: 100%; margin-top: 14px; font-family: inherit; }
   .btn-gold { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #030712; box-shadow: 0 4px 14px rgba(245,158,11,0.25); }
-  .btn-green { background: #10B981; color: #FFF; font-size: 13px; font-weight: 700; padding: 10px; margin-top: 8px; }
   .btn-dark-add { background: #111827; color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 15px; margin-top: 8px; border-radius: 14px; font-size: 14px; }
   .btn-delete { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.25); padding: 5px 10px; font-size: 11.5px; border-radius: 6px; font-weight: 500; }
   
@@ -90,14 +83,10 @@
 <div class="app-container">
   <header>
     <h1>مجموعه خودرویی پورمند</h1>
-    <p>سوپر اپلیکیشن هوشمند و دائمی (نسخه ضد پریدن دتا) — v26</p>
+    <p>نسخه سوپر اپلیکیشن PWA استاندارد — v27</p>
   </header>
 
-  <div class="install-banner" id="pwa-banner">
-    <span style="font-size: 13px; color: #A7F3D0; display: block; margin-bottom: 6px; font-weight: 500;">برنامه پورمند را به اپلیکیشن دائمی گوشی تبدیل کنید</span>
-    <button class="btn-action btn-green" id="pwa-btn">📲 نصب مستقیم اپلیکیشن پورمند روی منو</button>
-  </div>
-
+  <!-- COVER SLIDE -->
   <div class="card-panel">
     <div class="panel-header"><span>۱. اسلاید کاور ورودی</span></div>
     <label>تاریخ دقیق امروز</label>
@@ -112,11 +101,13 @@
     <div class="output-image-container" id="cover-output" style="display:none;"></div>
   </div>
 
+  <!-- SALES TEAM -->
   <div class="card-panel">
     <div class="panel-header"><span>مدیریت کارشناسان فروش نمایشگاه</span></div>
     <div id="contacts-list"></div>
   </div>
 
+  <!-- CARS WRAPPER -->
   <div id="cars-wrapper">
     <div class="card-panel" id="car-panel-1">
       <div class="panel-header"><span>۲. اسلاید خودرو شماره ۱</span></div>
@@ -175,11 +166,6 @@ const salesTeam = [
   { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶۲۳۹۵۲۴' }
 ];
 
-// سیستم نجات اطلاعات: ذخیره دائم لیست کارشناسان و تنظیمات در حافظه گوشی (Local Storage)
-function saveStateToStorage() {
-  localStorage.setItem('purmand_cars_db', JSON.stringify(carsDatabase));
-}
-
 function drawPerfectRoundedRect(ctx, x, y, w, h, r) {
   ctx.beginPath(); ctx.moveTo(x + r, y);
   ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
@@ -237,7 +223,7 @@ function buildSelectOptions(chosenId) {
 }
 
 function syncCarData(id, field, text) {
-  if(carsDatabase[id]) { carsDatabase[id][field] = text; renderCarSlide(id); saveStateToStorage(); }
+  if(carsDatabase[id]) { carsDatabase[id][field] = text; renderCarSlide(id); }
 }
 
 function renderCarSlide(id) {
@@ -305,7 +291,7 @@ function setCarPriceStyle(id, mode) {
     if(btnCall) btnCall.classList.add('active'); if(btnNum) btnNum.classList.remove('active');
     if(boxCall) boxCall.style.display = 'block'; if(boxNum) boxNum.style.display = 'none';
   }
-  renderCarSlide(id); saveStateToStorage();
+  renderCarSlide(id);
 }
 
 function createNewCarSlot() {
@@ -342,11 +328,11 @@ function createNewCarSlot() {
     <div class="output-image-container" id="output-${id}" style="display:none;"></div>
   `;
   container.appendChild(panel);
-  renderCarSlide(id); saveStateToStorage();
+  renderCarSlide(id);
 }
 
 function deleteCarSlot(id) {
-  const el = document.getElementById('car-panel-' + id); if(el) el.remove(); delete carsDatabase[id]; saveStateToStorage();
+  const el = document.getElementById('car-panel-' + id); if(el) el.remove(); delete carsDatabase[id];
 }
 
 function processCarImage(id, input) {
@@ -363,39 +349,17 @@ function generateViewableImage(canvasId, outputId, instructId) {
   const instructTag = document.getElementById(instructId);
   if(!canvas || !outputContainer) return;
   const dataUrl = canvas.toDataURL('image/png');
-  outputContainer.innerHTML = `<img src="${dataUrl}" alt="Final Story">`;
+  outputContainer.innerHTML = `<img src="${dataUrl}" alt="Story Output">`;
   outputContainer.style.display = 'block';
   if(instructTag) instructTag.style.display = 'block';
   outputContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// 🎛️ کدهای هوشمند مربوط به سیستم نصب دائمی PWA
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); deferredPrompt = e;
-  const banner = document.getElementById('pwa-banner');
-  if(banner) banner.style.display = 'block'; // نمایش دکمه سبز رنگ نصب در صورت پشتیبانی گوشی
-});
-
-const pwaBtn = document.getElementById('pwa-btn');
-if(pwaBtn) {
-  pwaBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        document.getElementById('pwa-banner').style.display = 'none';
-      }
-      deferredPrompt = null;
-    } else {
-      alert('برای نصب در آیفون: دکمه Share (پایین مرورگر) را بزنید و گزینه Add to Home Screen را انتخاب کنید.');
-    }
-  });
-}
-
-// ثبت خودکار سرویس ورکر مجازی جهت فریب دادن سیستم‌عامل برای باز شدن آفلاین و دائمی
+// ⚙️ اسکریپت جادویی سرویس ورکر استاندارد تزریق شده برای تایید سیستم‌عامل گوشی
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",e=>{});');
+  const swCode = 'self.addEventListener("fetch", function(e){});';
+  const blob = new Blob([swCode], {type: 'text/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob));
 }
 
 window.onload = function() {
