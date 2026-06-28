@@ -12,18 +12,24 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap?v=101" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap?v=105" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
   body {
-    background-color: #030712; color: #F3F4F6; padding: 24px 12px 60px; min-height: 100vh;
+    background-color: #030712; color: #F3F4F6; padding: 16px 12px 60px; min-height: 100vh;
     background-image: radial-gradient(circle at 50% 0%, #0B1528 0%, #030712 75%);
-    -webkit-user-select: none; user-select: none;
   }
   .app-container { max-width: 480px; margin: 0 auto; }
-  header { text-align: center; margin-bottom: 24px; padding: 10px 0; }
+  header { text-align: center; margin-bottom: 16px; padding: 10px 0; }
   header h1 { font-size: 22px; color: #F59E0B; font-weight: 900; }
   header p { font-size: 11px; color: #6B7280; margin-top: 4px; }
+  
+  /* دکمه دانلود گروهی فوق العاده سریع */
+  .bulk-download-banner {
+    background: linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%);
+    border: 2px solid #3B82F6; border-radius: 16px; padding: 16px; margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25); text-align: center;
+  }
   
   .card-panel {
     background: rgba(17, 24, 39, 0.95); border: 1px solid rgba(245, 158, 11, 0.2);
@@ -56,6 +62,7 @@
   
   .btn-action { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 16px; font-size: 14px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; width: 100%; margin-top: 14px; font-family: inherit; }
   .btn-gold { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #030712; box-shadow: 0 4px 14px rgba(245,158,11,0.25); }
+  .btn-blue-giant { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); color: #FFF; font-size: 15px; box-shadow: 0 6px 20px rgba(37,99,235,0.4); margin-top: 6px; }
   .btn-dark-add { background: #111827; color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 15px; margin-top: 8px; border-radius: 14px; font-size: 14px; }
   .btn-delete { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.25); padding: 5px 10px; font-size: 11.5px; border-radius: 6px; font-weight: 500; }
   
@@ -68,18 +75,23 @@
 <div class="app-container">
   <header>
     <h1>مجموعه خودرویی پورمند</h1>
-    <p>نسخه بدون باگ و فیکس شده دانلود — v19</p>
+    <p>نسخه هوشمند فست‌استوری (دانلود انبوه) — v21</p>
   </header>
+
+  <div class="bulk-download-banner">
+    <span style="font-size: 13px; color: #93C5FD; display: block; margin-bottom: 8px; font-weight: 500;">اتوماسیون سریع پیج اینستاگرام</span>
+    <button class="btn-action btn-blue-giant" onclick="downloadAllSlidesAtOnce()">🚀 دانلود یکجای تمام اسلایدهای امروز</button>
+  </div>
 
   <div class="card-panel">
     <div class="panel-header"><span>۱. اسلاید کاور ورودی</span></div>
     <label>تاریخ دقیق امروز</label>
-    <input type="text" id="coverDate" placeholder="مثلاً ۷ تیر ۱۴۰۵" oninput="renderCover()">
+    <input type="text" id="coverDate" placeholder="مثلاً ۹ تیر ۱۴۰۵" oninput="renderCover()">
     <label>متن دوم روی کاور</label>
     <input type="text" id="coverSub" value="موجودی جدید امروز نمایشگاه" oninput="renderCover()">
     
     <div class="canvas-container"><canvas id="coverCanvas" width="1080" height="1080"></canvas></div>
-    <button class="btn-action btn-gold" onclick="downloadCanvas('coverCanvas', 'کاور-موجودی')">⬇ دانلود اسلاید کاور</button>
+    <button class="btn-action btn-gold" onclick="triggerSingleDownload('coverCanvas', '00-کاور-موجودی')">⬇ دانلود تکی اسلاید کاور</button>
   </div>
 
   <div class="card-panel">
@@ -92,12 +104,12 @@
       <div class="panel-header"><span>۲. اسلاید خودرو شماره ۱</span></div>
       
       <label>نام و برند خودرو</label>
-      <input type="text" id="name-1" placeholder="مثلاً دنا پلاس توربو EF7" oninput="syncCarData(1, 'name', this.value)">
+      <input type="text" id="name-1" placeholder="مثلاً کیا اپتیما GT Line" oninput="syncCarData(1, 'name', this.value)">
 
       <div class="grid-3" style="margin-top:8px;">
-        <div><label>مدل خودرو</label><input type="text" id="model-1" placeholder="۱۴۰۵" oninput="syncCarData(1, 'model', this.value)"></div>
-        <div><label>رنگ بدنه</label><input type="text" id="color-1" placeholder="مشکی متالیک" oninput="syncCarData(1, 'color', this.value)"></div>
-        <div><label>وضعیت رنگ</label><input type="text" id="status-1" placeholder="بدون رنگ" oninput="syncCarData(1, 'status', this.value)"></div>
+        <div><label>مدل خودرو</label><input type="text" id="model-1" placeholder="۲۰۱۷" oninput="syncCarData(1, 'model', this.value)"></div>
+        <div><label>رنگ بدنه</label><input type="text" id="color-1" placeholder="سفید صدفی" oninput="syncCarData(1, 'color', this.value)"></div>
+        <div><label>وضعیت رنگ</label><input type="text" id="status-1" placeholder="دو لکه رنگ" oninput="syncCarData(1, 'status', this.value)"></div>
       </div>
 
       <label style="margin-top:12px;">نحوه درج قیمت اسلاید</label>
@@ -107,18 +119,18 @@
       </div>
 
       <div style="margin-top:8px;">
-        <div id="box-num-1"><label>قیمت (تومان)</label><input type="text" id="price-1" placeholder="۹۵۰,۰۰۰,۰۰۰" oninput="syncCarData(1, 'price', this.value)"></div>
+        <div id="box-num-1"><label>قیمت (تومان)</label><input type="text" id="price-1" placeholder="۳,۴۰۰,۰۰۰,۰۰۰" oninput="syncCarData(1, 'price', this.value)"></div>
         <div id="box-call-1" style="display:none;"><label>کارشناس پاسخگو</label><select id="select-contact-1" onchange="syncCarData(1, 'contactId', this.value)"></select></div>
       </div>
 
       <label>توضیحات تکمیلی (خط آخر)</label>
-      <input type="text" id="desc-1" placeholder="تحویل روز، سند آزاد، فول آپشن" oninput="syncCarData(1, 'desc', this.value)">
+      <input type="text" id="desc-1" placeholder="فول شرکتی، سقف پانوراما، بسیار تمیز" oninput="syncCarData(1, 'desc', this.value)">
 
       <label class="upload-trigger" onclick="document.getElementById('file-1').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
       <input type="file" accept="image/*" id="file-1" onchange="processCarImage(1, this)">
 
       <div class="canvas-container" onclick="document.getElementById('file-1').click()"><canvas id="canvas-1" width="1080" height="1080"></canvas></div>
-      <button class="btn-action btn-gold" id="download-btn-1" onclick="downloadCanvas('canvas-1', 'خودرو-1')">⬇ دانلود اسلاید خودرو ۱</button>
+      <button class="btn-action btn-gold" onclick="triggerSingleDownload('canvas-1', '01-خودرو-1')">⬇ دانلود تکی اسلاید خودرو ۱</button>
     </div>
   </div>
 
@@ -139,7 +151,7 @@ const salesTeam = [
   { id: 'p1', name: 'علی‌اصغر پورمند', phone: '۰۹۱۴۶۴۰۱۱۲۰' },
   { id: 'p2', name: 'علی‌اصغر پورمند', phone: '۰۹۱۰۴۰۴۴۴۹۲' },
   { id: 'p3', name: 'خانم انوشه', phone: '۰۹۱۴۸۵۰۵۰۷۵' },
-  { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶۲۳۹5۲۴' }
+  { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶۲۳۹۵۲۴' }
 ];
 
 function drawPerfectRoundedRect(ctx, x, y, w, h, r) {
@@ -289,7 +301,7 @@ function createNewCarSlot() {
     <label class="upload-trigger" onclick="document.getElementById('file-${id}').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
     <input type="file" accept="image/*" id="file-${id}" onchange="processCarImage(${id}, this)">
     <div class="canvas-container" onclick="document.getElementById('file-${id}').click()"><canvas id="canvas-${id}" width="1080" height="1080"></canvas></div>
-    <button class="btn-action btn-gold" id="download-btn-${id}" onclick="downloadCanvas('canvas-${id}', 'خودرو-${id}')">⬇ دانلود اسلاید خودرو ${id}</button>
+    <button class="btn-action btn-gold" onclick="triggerSingleDownload('canvas-${id}', '0${id}-خودرو-${id}')">⬇ دانلود تکی اسلاید خودرو ${id}</button>
   `;
   container.appendChild(panel);
   renderCarSlide(id);
@@ -307,18 +319,38 @@ function processCarImage(id, input) {
   }; reader.readAsDataURL(file);
 }
 
-// تابع دانلود اصلاح شده و فیکس شده (بدون بلاک کردن مرورگر)
-function downloadCanvas(canvasId, name) {
-  setTimeout(() => {
-    const c = document.getElementById(canvasId); 
-    if(!c) return;
+// تابع جدید، فوق العاده امن و سریع برای دانلود تکی بدون باگ قفل شدن صفحه
+function triggerSingleDownload(canvasId, filename) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  
+  canvas.toBlob((blob) => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.download = name + '.png'; 
-    a.href = c.toDataURL('image/png'); 
+    a.href = url;
+    a.download = filename + '.png';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  }, 50);
+    URL.revokeObjectURL(url);
+  }, 'image/png');
+}
+
+// 🚀 شاهکار اصلی: دانلود همزمان و یکجای تمام اسلایدها با یک کلیک
+function downloadAllSlidesAtOnce() {
+  // ۱. دانلود کاور اول
+  triggerSingleDownload('coverCanvas', '00-کاور-موجودی');
+  
+  // ۲. دور زدن و دانلود تمام اسلایدهای خودروی موجود در دیتابیس به صورت خودکار
+  Object.keys(carsDatabase).forEach((id) => {
+    const canvasId = 'canvas-' + id;
+    const filename = `0${id}-خودرو-${id}`;
+    // ایجاد فاصله زمانی بسیار ناچیز ۵۰ میلی ثانیه‌ای جهت پردازش مرتب در اندروید/آیفون
+    setTimeout(() => {
+      triggerSingleDownload(canvasId, filename);
+    }, id * 50);
+  });
 }
 
 window.onload = function() {
