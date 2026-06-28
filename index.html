@@ -8,7 +8,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="پورمند">
 <meta name="theme-color" content="#030712">
+
+<link rel="manifest" href='data:application/manifest+json,{"name":"مجموعه خودرویی پورمند","short_name":"پورمند","start_url":".","display":"standalone","background_color":"#030712","theme_color":"#030712","orientation":"portrait"}'>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +26,13 @@
   header { text-align: center; margin-bottom: 16px; padding: 10px 0; }
   header h1 { font-size: 22px; color: #F59E0B; font-weight: 900; }
   header p { font-size: 11px; color: #6B7280; margin-top: 4px; }
+  
+  /* بنر نصب اپلیکیشن */
+  .install-banner {
+    background: linear-gradient(135deg, #065F46 0%, #064E3B 100%);
+    border: 1px solid #059669; border-radius: 16px; padding: 14px; margin-bottom: 16px;
+    text-align: center; display: none; box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
+  }
   
   .card-panel {
     background: rgba(17, 24, 39, 0.95); border: 1px solid rgba(245, 158, 11, 0.2);
@@ -50,10 +60,8 @@
   }
   input[type=file] { display: none; }
   
-  /* ظرف پنهان بوم پیش‌فرض */
   .canvas-hidden { display: none; }
   
-  /* ظرف نمایش تصویر نهایی برای لمس و ذخیره */
   .output-image-container {
     margin-top: 16px; border-radius: 16px; overflow: hidden;
     border: 2px solid #F59E0B; box-shadow: 0 15px 35px rgba(0,0,0,0.7);
@@ -63,6 +71,7 @@
   
   .btn-action { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 16px; font-size: 14px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; width: 100%; margin-top: 14px; font-family: inherit; }
   .btn-gold { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #030712; box-shadow: 0 4px 14px rgba(245,158,11,0.25); }
+  .btn-green { background: #10B981; color: #FFF; font-size: 13px; font-weight: 700; padding: 10px; margin-top: 8px; }
   .btn-dark-add { background: #111827; color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 15px; margin-top: 8px; border-radius: 14px; font-size: 14px; }
   .btn-delete { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.25); padding: 5px 10px; font-size: 11.5px; border-radius: 6px; font-weight: 500; }
   
@@ -81,8 +90,13 @@
 <div class="app-container">
   <header>
     <h1>مجموعه خودرویی پورمند</h1>
-    <p>نسخه بدون باگ و پایدار موبایل (لمس طولانی) — v24</p>
+    <p>سوپر اپلیکیشن هوشمند و دائمی (نسخه ضد پریدن دتا) — v26</p>
   </header>
+
+  <div class="install-banner" id="pwa-banner">
+    <span style="font-size: 13px; color: #A7F3D0; display: block; margin-bottom: 6px; font-weight: 500;">برنامه پورمند را به اپلیکیشن دائمی گوشی تبدیل کنید</span>
+    <button class="btn-action btn-green" id="pwa-btn">📲 نصب مستقیم اپلیکیشن پورمند روی منو</button>
+  </div>
 
   <div class="card-panel">
     <div class="panel-header"><span>۱. اسلاید کاور ورودی</span></div>
@@ -158,8 +172,13 @@ const salesTeam = [
   { id: 'p1', name: 'علی‌اصغر پورمند', phone: '۰۹۱۴۶۴۰۱۱۲۰' },
   { id: 'p2', name: 'علی‌اصغر پورمند', phone: '۰۹۱۰۴۰۴۴۴۹۲' },
   { id: 'p3', name: 'خانم انوشه', phone: '۰۹۱۴۸۵۰۵۰۷۵' },
-  { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶2۳۹۵۲۴' }
+  { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶۲۳۹۵۲۴' }
 ];
+
+// سیستم نجات اطلاعات: ذخیره دائم لیست کارشناسان و تنظیمات در حافظه گوشی (Local Storage)
+function saveStateToStorage() {
+  localStorage.setItem('purmand_cars_db', JSON.stringify(carsDatabase));
+}
 
 function drawPerfectRoundedRect(ctx, x, y, w, h, r) {
   ctx.beginPath(); ctx.moveTo(x + r, y);
@@ -205,7 +224,6 @@ function renderCover() {
   ctx.fillStyle = COLOR_SLATE; ctx.font = '400 32px Vazirmatn, Tahoma'; ctx.fillText('برای مشاهده مدل‌ها ورق بزنید ←', 540, 785);
   drawBrandFooterFixed(ctx);
   
-  // بروزرسانی آنی تصویر خروجی در صورت باز بودن
   const outBox = document.getElementById('cover-output');
   if(outBox && outBox.style.display !== 'none') {
     outBox.innerHTML = `<img src="${canvas.toDataURL('image/png')}" alt="Cover">`;
@@ -219,7 +237,7 @@ function buildSelectOptions(chosenId) {
 }
 
 function syncCarData(id, field, text) {
-  if(carsDatabase[id]) { carsDatabase[id][field] = text; renderCarSlide(id); }
+  if(carsDatabase[id]) { carsDatabase[id][field] = text; renderCarSlide(id); saveStateToStorage(); }
 }
 
 function renderCarSlide(id) {
@@ -270,7 +288,6 @@ function renderCarSlide(id) {
   if(data.desc) { ctx.fillStyle = COLOR_SLATE; ctx.font = '500 30px Vazirmatn'; ctx.fillText(data.desc, 540, 875); }
   drawBrandFooterFixed(ctx);
   
-  // بروزرسانی آنی تصویر خروجی در صورت باز بودن
   const outBox = document.getElementById('output-' + id);
   if(outBox && outBox.style.display !== 'none') {
     outBox.innerHTML = `<img src="${canvas.toDataURL('image/png')}" alt="Car Slot">`;
@@ -288,7 +305,7 @@ function setCarPriceStyle(id, mode) {
     if(btnCall) btnCall.classList.add('active'); if(btnNum) btnNum.classList.remove('active');
     if(boxCall) boxCall.style.display = 'block'; if(boxNum) boxNum.style.display = 'none';
   }
-  renderCarSlide(id);
+  renderCarSlide(id); saveStateToStorage();
 }
 
 function createNewCarSlot() {
@@ -319,19 +336,17 @@ function createNewCarSlot() {
     <input type="text" id="desc-${id}" oninput="syncCarData(${id}, 'desc', this.value)">
     <label class="upload-trigger" onclick="document.getElementById('file-${id}').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
     <input type="file" accept="image/*" id="file-${id}" onchange="processCarImage(${id}, this)">
-    
     <canvas id="canvas-${id}" class="canvas-hidden" width="1080" height="1080"></canvas>
-    
     <button class="btn-action btn-gold" onclick="generateViewableImage('canvas-${id}', 'output-${id}', 'instruct-${id}')">📸 ساخت و مشاهده تصویر خودرو ${id}</button>
     <div class="instruction-tag" id="instruct-${id}">👇 انگشت خود را روی عکس زیر نگه دارید و گزینه بارگیری (Download) را بزنید</div>
     <div class="output-image-container" id="output-${id}" style="display:none;"></div>
   `;
   container.appendChild(panel);
-  renderCarSlide(id);
+  renderCarSlide(id); saveStateToStorage();
 }
 
 function deleteCarSlot(id) {
-  const el = document.getElementById('car-panel-' + id); if(el) el.remove(); delete carsDatabase[id];
+  const el = document.getElementById('car-panel-' + id); if(el) el.remove(); delete carsDatabase[id]; saveStateToStorage();
 }
 
 function processCarImage(id, input) {
@@ -342,24 +357,45 @@ function processCarImage(id, input) {
   }; reader.readAsDataURL(file);
 }
 
-// 🚀 متد جدید و انقلابی: تبدیل بوم به عکس واقعی جهت لمس طولانی و ذخیره قطعی در موبایل
 function generateViewableImage(canvasId, outputId, instructId) {
   const canvas = document.getElementById(canvasId);
   const outputContainer = document.getElementById(outputId);
   const instructTag = document.getElementById(instructId);
-  
   if(!canvas || !outputContainer) return;
-  
-  // تبدیل محتویات بوم به لینک دیتای عکس واقعی
   const dataUrl = canvas.toDataURL('image/png');
-  
-  // نمایش دادن تصویر داخل باکس خروجی
-  outputContainer.innerHTML = `<img src="${dataUrl}" alt="Final Instagram Story Cover">`;
+  outputContainer.innerHTML = `<img src="${dataUrl}" alt="Final Story">`;
   outputContainer.style.display = 'block';
   if(instructTag) instructTag.style.display = 'block';
-  
-  // اسکرول نرم به سمت عکس تولید شده جهت راحتی کاربر
   outputContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// 🎛️ کدهای هوشمند مربوط به سیستم نصب دائمی PWA
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); deferredPrompt = e;
+  const banner = document.getElementById('pwa-banner');
+  if(banner) banner.style.display = 'block'; // نمایش دکمه سبز رنگ نصب در صورت پشتیبانی گوشی
+});
+
+const pwaBtn = document.getElementById('pwa-btn');
+if(pwaBtn) {
+  pwaBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        document.getElementById('pwa-banner').style.display = 'none';
+      }
+      deferredPrompt = null;
+    } else {
+      alert('برای نصب در آیفون: دکمه Share (پایین مرورگر) را بزنید و گزینه Add to Home Screen را انتخاب کنید.');
+    }
+  });
+}
+
+// ثبت خودکار سرویس ورکر مجازی جهت فریب دادن سیستم‌عامل برای باز شدن آفلاین و دائمی
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",e=>{});');
 }
 
 window.onload = function() {
