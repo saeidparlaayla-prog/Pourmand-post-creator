@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>اپلیکیشن پورمند</title>
 
-<!-- تنظیمات تبدیل به اپلیکیشن گوشی (PWA) -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +12,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap?v=101" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
   body {
@@ -23,7 +22,7 @@
   }
   .app-container { max-width: 480px; margin: 0 auto; }
   header { text-align: center; margin-bottom: 24px; padding: 10px 0; }
-  header h1 { font-size: 22px; color: #F59E0B; font-weight: 900; letter-spacing: -0.5px; }
+  header h1 { font-size: 22px; color: #F59E0B; font-weight: 900; }
   header p { font-size: 11px; color: #6B7280; margin-top: 4px; }
   
   .card-panel {
@@ -35,12 +34,11 @@
   label { display: block; font-size: 12px; color: #D1D5DB; margin: 12px 0 6px; font-weight: 500; }
   input[type=text], select {
     width: 100%; padding: 13px; border-radius: 12px; border: 1px solid #1F2937;
-    background: #0B1329; color: #FFF; font-size: 14px; direction: rtl; outline: none; -webkit-appearance: none;
+    background: #0B1329; color: #FFF; font-size: 14px; direction: rtl; outline: none;
   }
   input:focus, select:focus { border-color: #F59E0B; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15); }
   
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   
   .pricing-tabs { display: flex; gap: 6px; margin: 6px 0; background: #030712; padding: 4px; border-radius: 12px; border: 1px solid #1F2937; }
   .tab-btn { flex: 1; padding: 10px; border-radius: 8px; font-size: 12.5px; border: none; background: transparent; color: #9CA3AF; cursor: pointer; font-weight: 500; }
@@ -70,14 +68,13 @@
 <div class="app-container">
   <header>
     <h1>مجموعه خودرویی پورمند</h1>
-    <p>نسخه اپلیکیشن مستقل موبایل (ضد کش) — v18</p>
+    <p>نسخه بدون باگ و فیکس شده دانلود — v19</p>
   </header>
 
-  <!-- COVER SLIDE -->
   <div class="card-panel">
     <div class="panel-header"><span>۱. اسلاید کاور ورودی</span></div>
     <label>تاریخ دقیق امروز</label>
-    <input type="text" id="coverDate" placeholder="مثلاً ۶ تیر ۱۴۰۵" oninput="renderCover()">
+    <input type="text" id="coverDate" placeholder="مثلاً ۷ تیر ۱۴۰۵" oninput="renderCover()">
     <label>متن دوم روی کاور</label>
     <input type="text" id="coverSub" value="موجودی جدید امروز نمایشگاه" oninput="renderCover()">
     
@@ -85,24 +82,22 @@
     <button class="btn-action btn-gold" onclick="downloadCanvas('coverCanvas', 'کاور-موجودی')">⬇ دانلود اسلاید کاور</button>
   </div>
 
-  <!-- SALES TEAM -->
   <div class="card-panel">
     <div class="panel-header"><span>مدیریت کارشناسان فروش نمایشگاه</span></div>
     <div id="contacts-list"></div>
   </div>
 
-  <!-- CARS WRAPPER -->
   <div id="cars-wrapper">
     <div class="card-panel" id="car-panel-1">
       <div class="panel-header"><span>۲. اسلاید خودرو شماره ۱</span></div>
       
       <label>نام و برند خودرو</label>
-      <input type="text" id="name-1" placeholder="مثلاً کیا اپتیما GT Line" oninput="syncCarData(1, 'name', this.value)">
+      <input type="text" id="name-1" placeholder="مثلاً دنا پلاس توربو EF7" oninput="syncCarData(1, 'name', this.value)">
 
       <div class="grid-3" style="margin-top:8px;">
-        <div><label>مدل خودرو</label><input type="text" id="model-1" placeholder="۲۰۱۷" oninput="syncCarData(1, 'model', this.value)"></div>
-        <div><label>رنگ بدنه</label><input type="text" id="color-1" placeholder="سفید صدفی" oninput="syncCarData(1, 'color', this.value)"></div>
-        <div><label>وضعیت رنگ</label><input type="text" id="status-1" placeholder="دو لکه رنگ" oninput="syncCarData(1, 'status', this.value)"></div>
+        <div><label>مدل خودرو</label><input type="text" id="model-1" placeholder="۱۴۰۵" oninput="syncCarData(1, 'model', this.value)"></div>
+        <div><label>رنگ بدنه</label><input type="text" id="color-1" placeholder="مشکی متالیک" oninput="syncCarData(1, 'color', this.value)"></div>
+        <div><label>وضعیت رنگ</label><input type="text" id="status-1" placeholder="بدون رنگ" oninput="syncCarData(1, 'status', this.value)"></div>
       </div>
 
       <label style="margin-top:12px;">نحوه درج قیمت اسلاید</label>
@@ -112,18 +107,18 @@
       </div>
 
       <div style="margin-top:8px;">
-        <div id="box-num-1"><label>قیمت (تومان)</label><input type="text" id="price-1" placeholder="۳,۴۰۰,۰۰۰,۰۰۰" oninput="syncCarData(1, 'price', this.value)"></div>
+        <div id="box-num-1"><label>قیمت (تومان)</label><input type="text" id="price-1" placeholder="۹۵۰,۰۰۰,۰۰۰" oninput="syncCarData(1, 'price', this.value)"></div>
         <div id="box-call-1" style="display:none;"><label>کارشناس پاسخگو</label><select id="select-contact-1" onchange="syncCarData(1, 'contactId', this.value)"></select></div>
       </div>
 
       <label>توضیحات تکمیلی (خط آخر)</label>
-      <input type="text" id="desc-1" placeholder="فول شرکتی، سقف پانوراما، بسیار تمیز" oninput="syncCarData(1, 'desc', this.value)">
+      <input type="text" id="desc-1" placeholder="تحویل روز، سند آزاد، فول آپشن" oninput="syncCarData(1, 'desc', this.value)">
 
       <label class="upload-trigger" onclick="document.getElementById('file-1').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
       <input type="file" accept="image/*" id="file-1" onchange="processCarImage(1, this)">
 
       <div class="canvas-container" onclick="document.getElementById('file-1').click()"><canvas id="canvas-1" width="1080" height="1080"></canvas></div>
-      <button class="btn-action btn-gold" onclick="downloadCanvas('canvas-1', 'خودرو-1')">⬇ دانلود اسلاید خودرو ۱</button>
+      <button class="btn-action btn-gold" id="download-btn-1" onclick="downloadCanvas('canvas-1', 'خودرو-1')">⬇ دانلود اسلاید خودرو ۱</button>
     </div>
   </div>
 
@@ -144,7 +139,7 @@ const salesTeam = [
   { id: 'p1', name: 'علی‌اصغر پورمند', phone: '۰۹۱۴۶۴۰۱۱۲۰' },
   { id: 'p2', name: 'علی‌اصغر پورمند', phone: '۰۹۱۰۴۰۴۴۴۹۲' },
   { id: 'p3', name: 'خانم انوشه', phone: '۰۹۱۴۸۵۰۵۰۷۵' },
-  { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶۲۳۹۵۲۴' }
+  { id: 'p4', name: 'سعید پورمند', phone: '۰۹۱۴۶۲۳۹5۲۴' }
 ];
 
 function drawPerfectRoundedRect(ctx, x, y, w, h, r) {
@@ -294,7 +289,7 @@ function createNewCarSlot() {
     <label class="upload-trigger" onclick="document.getElementById('file-${id}').click()">📁 انتخاب و بارگذاری عکس خودرو از گالری</label>
     <input type="file" accept="image/*" id="file-${id}" onchange="processCarImage(${id}, this)">
     <div class="canvas-container" onclick="document.getElementById('file-${id}').click()"><canvas id="canvas-${id}" width="1080" height="1080"></canvas></div>
-    <button class="btn-action btn-gold" onclick="downloadCanvas('canvas-${id}', 'خودرو-${id}')">⬇ دانلود اسلاید خودرو ${id}</button>
+    <button class="btn-action btn-gold" id="download-btn-${id}" onclick="downloadCanvas('canvas-${id}', 'خودرو-${id}')">⬇ دانلود اسلاید خودرو ${id}</button>
   `;
   container.appendChild(panel);
   renderCarSlide(id);
@@ -312,9 +307,18 @@ function processCarImage(id, input) {
   }; reader.readAsDataURL(file);
 }
 
+// تابع دانلود اصلاح شده و فیکس شده (بدون بلاک کردن مرورگر)
 function downloadCanvas(canvasId, name) {
-  const c = document.getElementById(canvasId); const a = document.createElement('a');
-  a.download = name + '.png'; a.href = c.toDataURL('image/png'); a.click();
+  setTimeout(() => {
+    const c = document.getElementById(canvasId); 
+    if(!c) return;
+    const a = document.createElement('a');
+    a.download = name + '.png'; 
+    a.href = c.toDataURL('image/png'); 
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }, 50);
 }
 
 window.onload = function() {
